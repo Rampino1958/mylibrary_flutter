@@ -1,0 +1,12 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: |
+      git config --global --add safe.directory /workspace/mylibrary_flutter
+      flutter pub get
+  - command: flutter run -d chrome
+
+ports:
+  - port: 5000
+    onOpen: open-preview
