@@ -1,13 +1,5 @@
-FROM gitpod/workspace-full:latest
+FROM gitpod/workspace-full
 
-# Installa Flutter
-RUN git clone https://github.com/flutter/flutter.git /home/gitpod/flutter -b stable
-ENV PATH="/home/gitpod/flutter/bin:${PATH}"
-
-# Configura Flutter per Android e Web
-RUN flutter doctor
-RUN flutter config --enable-web
-RUN flutter precache
-
-# Licenze Android (necessarie se vuoi build APK)
-RUN yes | flutter doctor --android-licenses
+# Installazioni extra (se servono)
+RUN sudo apt-get update && \
+    sudo apt-get install -y unzip xz-utils zip libglu1-mesa
