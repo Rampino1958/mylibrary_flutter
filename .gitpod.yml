@@ -1,12 +1,16 @@
-image:
-  file: .gitpod.Dockerfile
-
 tasks:
-  - init: |
-      git config --global --add safe.directory /workspace/mylibrary_flutter
+  - name: Setup Flutter
+    init: |
+      sudo apt-get update
+      sudo apt-get install -y git unzip zip xz-utils curl clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev chromium-browser
+      git clone https://github.com/flutter/flutter.git -b stable $HOME/flutter
+      export PATH="$HOME/flutter/bin:$PATH"
+      flutter config --enable-web
+      flutter doctor
+    command: |
+      export PATH="$HOME/flutter/bin:$PATH"
       flutter pub get
-  - command: flutter run -d chrome
-
+      flutter run -d web-server --web-hostname=0.0.0.0 --web-port=8080
 ports:
-  - port: 5000
+  - port: 8080
     onOpen: open-preview
