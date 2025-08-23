@@ -2,15 +2,15 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Setup Flutter
-    init: |
-      git clone https://github.com/flutter/flutter.git -b stable $HOME/flutter || true
+  - init: |
+      # Aggiungi Flutter al PATH
       export PATH="$HOME/flutter/bin:$PATH"
-      flutter config --enable-web
-      flutter precache --web
-      sudo apt-get update
-      sudo apt-get install -y chromium-browser
-      export CHROME_EXECUTABLE=$(which chromium-browser)
+
+      # Mostra Flutter per verifica
+      flutter --version
+
+      # Accetta licenze Android
+      yes | flutter doctor --android-licenses
+
+      # Verifica tutto
       flutter doctor -v
-    command: |
-      echo "✅ Ambiente pronto. Puoi lanciare: flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0"
