@@ -1,13 +1,10 @@
+# Usa il Dockerfile personalizzato
 image:
   file: .gitpod.Dockerfile
 
 tasks:
   - name: Setup Flutter
     init: |
-      git clone https://github.com/flutter/flutter.git -b stable $HOME/flutter
-      echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc
-      export PATH="$HOME/flutter/bin:$PATH"
-      flutter doctor
       cd my_library_position
       flutter pub get
 
