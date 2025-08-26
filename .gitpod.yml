@@ -2,15 +2,16 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: |
-      # Aggiungi Flutter al PATH
+  - name: Setup Flutter
+    init: |
+      git clone https://github.com/flutter/flutter.git -b stable $HOME/flutter
+      echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc
       export PATH="$HOME/flutter/bin:$PATH"
+      flutter doctor
+      cd my_library_position
+      flutter pub get
 
-      # Mostra Flutter per verifica
-      flutter --version
-
-      # Accetta licenze Android
-      yes | flutter doctor --android-licenses
-
-      # Verifica tutto
-      flutter doctor -v
+vscode:
+  extensions:
+    - Dart-Code.flutter
+    - Dart-Code.dart-code
