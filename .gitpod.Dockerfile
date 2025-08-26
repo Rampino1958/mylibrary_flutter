@@ -1,17 +1,29 @@
+
 FROM gitpod/workspace-full:latest
 
 # Installa tool necessari
-RUN sudo apt-get update &&     sudo apt-get install -y unzip curl git wget
+RUN sudo apt-get update && \
+    sudo apt-get install -y unzip curl git wget xz-utils zip libglu1-mesa libgtk-3-dev mesa-utils && \
+    rm -rf /var/lib/apt/lists/*
 
-# Scarica Flutter SDK stabile
-RUN curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.0-stable.tar.xz &&     tar xf flutter_linux_3.24.0-stable.tar.xz &&     mv flutter /home/gitpod/flutter
+# Scarica Flutter SDK stabile nella home
+RUN git clone https://github.com/flutter/flutter.git /home/gitpod/flutter_sdk
 
-# Crea cartella Android SDK
-RUN mkdir -p /home/gitpod/Android/cmdline-tools
+# Imposta variabili d'ambiente per Flutter
+ENV PATH="/home/gitpod/flutter_sdk/bin:/home/gitpod/flutter_sdk/bin/cache/dart-sdk/bin:${PATH}"
 
-# Scarica Android SDK command line tools
-RUN curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip &&     unzip sdk-tools.zip -d /home/gitpod/Android/cmdline-tools &&     mv /home/gitpod/Android/cmdline-tools/cmdline-tools /home/gitpod/Android/cmdline-tools/latest
+# Aggiorna Flutter al canale stabile
+RUN /home/gitpod/flutter_sdk/bin/flutter channel stable && \
+    /home/gitpod/flutter_sdk/bin/flutter upgrade && \
+    /home/gitpod/flutter_sdk/bin/flutter doctor -v
 
-# Imposta variabili d'ambiente
+# Crea cartella Android SDK e scarica command line tools
+RUN mkdir -p /home/gitpod/Android/cmdline-tools && \
+    curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip && \
+    unzip sdk-tools.zip -d /home/gitpod/Android/cmdline-tools && \
+    mv /home/gitpod/Android/cmdline-tools/cmdline-tools /home/gitpod/Android/cmdline-tools/latest && \
+    rm sdk-tools.zip
+
+# Imposta variabili d'ambiente Android
 ENV ANDROID_HOME=/home/gitpod/Android
 ENV PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
